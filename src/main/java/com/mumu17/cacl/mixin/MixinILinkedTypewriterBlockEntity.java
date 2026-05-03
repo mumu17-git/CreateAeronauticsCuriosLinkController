@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.mumu17.cacl.CACL;
 import com.mumu17.cacl.mixin_interface.ILinkedTypewriterBlockEntityExtension;
 import com.mumu17.cacl.mixin_interface.ILinkedTypewriterEntriesExtension;
 import com.mumu17.cacl.util.DummyLevel;
@@ -100,7 +99,6 @@ public abstract class MixinILinkedTypewriterBlockEntity implements ILinkedTypewr
     public boolean isRunOnServer(DummyLevel dummyLevel) {
         boolean lastRunOnServer = this.runOnServer;
         setRunOn(dummyLevel);
-        CACL.LOGGER.debug("Additional Condition: {} && {}", !lastRunOnServer, this.runOnServer);
         return !lastRunOnServer && this.runOnServer;
     }
 
@@ -113,19 +111,8 @@ public abstract class MixinILinkedTypewriterBlockEntity implements ILinkedTypewr
         this.clientCheck = b;
     }
 
-
-    /*@Inject(method = "checkAndStartUsing", at = @At("RETURN"))
-    public void onCheckAndStartUsing(UUID userID, CallbackInfoReturnable<Boolean> cir) {
-        LinkedTypewriterBlockEntity self = (LinkedTypewriterBlockEntity)(Object)this;
-        if (self == null || self.getLevel() == null) return;
-        ItemStack stack = CuriosUtils.getEquippedLinkedTypewriter(self.getLevel().getPlayerByUUID(userID));
-        if (stack == null) return;
-        saveAdditional(stack);
-    }*/
-
     @ModifyArg(method = "checkAndStartUsing", at = @At(value = "INVOKE", target = "Ldev/simulated_team/simulated/mixin_interface/PlayerTypewriterExtension;simulated$setCurrentTypewriter(Lnet/minecraft/core/BlockPos;)V"))
     public BlockPos cacl$setCurrentTypewriter(BlockPos pos, @Local(name = "player") PlayerTypewriterExtension player) {
-        CACL.LOGGER.debug("Setting current typewriter position, original pos: {}, player pos: {}", pos, player != null ? ((Player) player).blockPosition() : "N/A");
         return pos != null ? pos : (player != null ? ((Player) player).blockPosition() : null);
     }
 
@@ -172,20 +159,15 @@ public abstract class MixinILinkedTypewriterBlockEntity implements ILinkedTypewr
     @ModifyExpressionValue(method = "checkAndStartUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getBlockEntity(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;"))
     public BlockEntity cacl$getBlockEntity(BlockEntity original, @Local(name = "player") PlayerTypewriterExtension player) {
         if (original != null) return original;
-        CACL.LOGGER.debug("Original BE was null, attempting to look up DummyLevel for player {}", player);
         if (player != null) {
             Player p = (Player) player;
-            BlockEntity be = LinkedTypewriterBlockEntityUtils.getLinkedTypewriterBlockEntityAt(p.blockPosition(), p);
-            CACL.LOGGER.debug("Original BE was null, looked up DummyLevel and found BE: {}", be);
-            return be;
+            return LinkedTypewriterBlockEntityUtils.getLinkedTypewriterBlockEntityAt(p.blockPosition(), p);
         }
         return null;
     }
 
     @Inject(method = "disconnectUser", at = @At("HEAD"))
     public void cacl$disconnectUser(CallbackInfo ci) {
-        CACL.LOGGER.debug("Disconnecting user from typewriter, currentUser: {}, typedEntry: {}, entryMap: {}, pressedKeys: {}", this.currentUser, this.typedEntry, this.entryMap, this.pressedKeys);
-
         LinkedTypewriterBlockEntity lbe = ((LinkedTypewriterBlockEntity)(Object)this);
         if (lbe != null) {
             DummyLevel dummyLevel = DummyLevel.getDummyLevelFor(lbe);
@@ -199,11 +181,5 @@ public abstract class MixinILinkedTypewriterBlockEntity implements ILinkedTypewr
                 }
             }
         }
-    }
-
-    @ModifyExpressionValue(method = "checkAndStartUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getPlayerByUUID(Ljava/util/UUID;)Lnet/minecraft/world/entity/player/Player;"))
-    public Player onGetPlayerByUUID(Player original) {
-        CACL.LOGGER.debug("Getting player by UUID, original player: {}", original);
-        return original;
     }
 }

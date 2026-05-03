@@ -1,13 +1,10 @@
 package com.mumu17.cacl.mixin;
 
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mumu17.cacl.network.RemoteTypewriterKeyInteractionPacket;
 import com.mumu17.cacl.util.DummyLevel;
 import dev.simulated_team.simulated.content.blocks.redstone.linked_typewriter.LinkedTypewriterBlockEntity;
 import dev.simulated_team.simulated.content.blocks.redstone.linked_typewriter.LinkedTypewriterInteractionHandler;
-import dev.simulated_team.simulated.network.packets.linked_typewriter.TypewriterKeyInteractionPacket;
-import foundry.veil.api.network.VeilPacketManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import org.spongepowered.asm.mixin.Mixin;

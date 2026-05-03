@@ -63,7 +63,6 @@ public final class DummyLevel {
             return null;
         }
         linkedTypewriterBlockEntity.setLevel(realLevel);
-        // setBlockEntity(pos, linkedTypewriterBlockEntity, player);
         return linkedTypewriterBlockEntity;
     }
 

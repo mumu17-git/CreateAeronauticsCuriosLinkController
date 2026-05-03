@@ -1,6 +1,6 @@
 {
-  "itemGroup.cacl": "Create Aeronautics: Curios LinkController",
-  "item.cacl.coordinate_recorder": "Coordinate Recorder (Typewriter)",
-  "chat.cacl.recorded_position": "Recorded Position",
+  "itemGroup.cacl": "Create Aeronautics: Curios LinkedTypewriter",
+  "key.categories.cacl": "Curios LinkedTypewriter",
+  "key.cacl.remote_use": "Use Remote",
   "curios.identifier.linked_typewriter": "Linked Typewriter"
 }
