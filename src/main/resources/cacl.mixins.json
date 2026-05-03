@@ -1,0 +1,22 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "mixinextras": {
+    "minVersion": "0.5.3"
+  },
+  "package": "com.mumu17.cacl.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "MixinILinkedTypewriterBlockEntity",
+    "MixinLinkedTypewriterEntries",
+    "MixinLinkedTypewriterInteractionHandler"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}
