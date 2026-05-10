@@ -1,5 +1,6 @@
 package com.mumu17.cacl.event.client;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mumu17.cacl.CACL;
 import com.mumu17.cacl.mixin_interface.ILinkedTypewriterBlockEntityExtension;
 import com.mumu17.cacl.network.RemoteUsePacket;
@@ -18,6 +19,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import org.lwjgl.glfw.GLFW;
 
 @EventBusSubscriber(
         modid = CACL.MODID,
@@ -27,11 +29,29 @@ public class ClientKeyInputHandler {
 
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
-        if (ModKeyBindings.REMOTE_USE.consumeClick()) {
+        if (ModKeyBindings.REMOTE_USE.consumeClick() && !isAnyKeyExceptRemoteUseDown()) {
             onRemoteUseKeyPressed();
         }
         LinkedTypewriterInteractionHandler.tick();
     }
+
+
+
+    private static boolean isAnyKeyExceptRemoteUseDown() {
+        Minecraft mc = Minecraft.getInstance();
+        long window = mc.getWindow().getWindow();
+
+        for (int key = GLFW.GLFW_KEY_SPACE; key <= GLFW.GLFW_KEY_LAST; key++) {
+            if (key == ModKeyBindings.REMOTE_USE.getKey().getValue()) continue;
+
+            if (InputConstants.isKeyDown(window, key)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     private static void onRemoteUseKeyPressed() {
         Minecraft mc = Minecraft.getInstance();
