@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Mixin(LinkedTypewriterBlockEntity.class)
-@Debug(export = true)
 public abstract class MixinILinkedTypewriterBlockEntity implements ILinkedTypewriterBlockEntityExtension {
 
     @Shadow
@@ -112,8 +111,8 @@ public abstract class MixinILinkedTypewriterBlockEntity implements ILinkedTypewr
     }
 
     @ModifyArg(method = "checkAndStartUsing", at = @At(value = "INVOKE", target = "Ldev/simulated_team/simulated/mixin_interface/PlayerTypewriterExtension;simulated$setCurrentTypewriter(Lnet/minecraft/core/BlockPos;)V"))
-    public BlockPos cacl$setCurrentTypewriter(BlockPos pos, @Local(name = "player") PlayerTypewriterExtension player) {
-        return pos != null ? pos : (player != null ? ((Player) player).blockPosition() : null);
+    public BlockPos cacl$setCurrentTypewriter(BlockPos pos, @Local(name = "playerEx") PlayerTypewriterExtension playerEx) {
+        return pos != null ? pos : (playerEx != null ? ((Player) playerEx).blockPosition() : null);
     }
 
     @ModifyExpressionValue(
@@ -157,10 +156,10 @@ public abstract class MixinILinkedTypewriterBlockEntity implements ILinkedTypewr
     }
 
     @ModifyExpressionValue(method = "checkAndStartUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getBlockEntity(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;"))
-    public BlockEntity cacl$getBlockEntity(BlockEntity original, @Local(name = "player") PlayerTypewriterExtension player) {
+    public BlockEntity cacl$getBlockEntity(BlockEntity original, @Local(name = "playerEx") PlayerTypewriterExtension playerEx) {
         if (original != null) return original;
-        if (player != null) {
-            Player p = (Player) player;
+        if (playerEx != null) {
+            Player p = (Player) playerEx;
             return LinkedTypewriterBlockEntityUtils.getLinkedTypewriterBlockEntityAt(p.blockPosition(), p);
         }
         return null;

@@ -5,7 +5,6 @@ import dev.simulated_team.simulated.content.blocks.redstone.linked_typewriter.Li
 import org.spongepowered.asm.mixin.*;
 
 @Mixin(LinkedTypewriterEntries.class)
-@Debug(export = true)
 public class MixinLinkedTypewriterEntries implements ILinkedTypewriterEntriesExtension {
 
     @Unique
